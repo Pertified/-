@@ -1,0 +1,36 @@
+finance_manager/
+│
+├── static/
+│   ├── css/
+│   │   ├── style.css               # 主样式（保留）
+│   │   ├── cards.css              # 卡片组件样式（保留）
+│   │   ├── charts/               # 新增：图表样式目录
+│   │   │   ├── charts-base.css   # 图表基础样式
+│   │   │   ├── charts-theme.css  # 图表主题配置
+│   │   │   └── animations.css    # 动画效果样式
+│   │   └── themes/               # 新增：主题目录
+│   │       ├── light.css         # 浅色主题
+│   │       └── dark.css          # 深色主题
+│   │
+│   ├── js/
+│   │   ├── app.js                 # 主应用逻辑（保留）
+│   │   ├── dashboard.js           # 仪表板逻辑（保留）
+│   │   ├── charts/               # 重构：图表模块目录
+│   │   │   ├── chart-config.js   # 图表全局配置
+│   │   │   ├── chart-factory.js  # 图表工厂模式
+│   │   │   ├── chart-types/      # 各类图表实现
+│   │   │   │   ├── pie-charts.js     # 饼图类
+│   │   │   │   ├── line-charts.js    # 折线图类
+│   │   │   │   ├── bar-charts.js     # 柱状图类
+│   │   │   │   ├── gauge-charts.js   # 仪表盘图
+│   │   │   │   ├── radar-charts.js   # 雷达图
+│   │   │   │   ├── sankey-charts.js  # 桑基图
+│   │   │   │   └── heatmap-charts.js # 热力图
+│   │   │   ├── chart-animations.js   # 动画效果库
+│   │   │   └── chart-interactions.js # 交互功能库
+│   │   ├── utils/                # 新增：工具函数目录
+│   │   │   ├── color-palette.js  # 颜色方案管理
+│   │   │   ├── data-formatter.js # 数据格式化
+│   │   │   └── chart-utils.js    # 图表工具函数
+│   │   └── config/               # 新增：配置文件目录
+│   │       └── chart-options.js  # 图表选项配置

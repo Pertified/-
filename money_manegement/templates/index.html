@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>财务管理系统 - 智能资产追踪与分析</title>
+
+    <!-- 样式文件 -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/cards.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">💰</div>
+                <h1 class="sidebar-title">财务管理</h1>
+            </div>
+
+            <nav class="nav-menu">
+                <!-- 主要功能 -->
+                <div class="nav-section">
+                    <div class="nav-section-title">主要功能</div>
+                    <ul class="nav-items">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active" data-target="dashboard">
+                                <span class="nav-icon">📊</span>
+                                <span>仪表盘</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-target="accounts">
+                                <span class="nav-icon">💳</span>
+                                <span>账户管理</span>
+                                <span class="nav-badge" id="accountCount">0</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-target="transactions">
+                                <span class="nav-icon">💸</span>
+                                <span>交易记录</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-target="analytics">
+                                <span class="nav-icon">📈</span>
+                                <span>数据分析</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 设置 -->
+                <div class="nav-section">
+                    <div class="nav-section-title">设置</div>
+                    <ul class="nav-items">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-target="categories">
+                                <span class="nav-icon">🏷️</span>
+                                <span>分类管理</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-target="import">
+                                <span class="nav-icon">📥</span>
+                                <span>数据导入</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-target="settings">
+                                <span class="nav-icon">⚙️</span>
+                                <span>系统设置</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- 侧边栏底部 -->
+            <div class="sidebar-footer">
+                <div class="storage-info">
+                    <small class="text-muted">数据存储：本地</small>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- 仪表盘视图 -->
+                <section id="dashboard-view" class="view-section">
+                    <!-- 页面头部 -->
+                    <div class="page-header">
+                        <div class="page-header-content">
+                            <div>
+                                <h1 class="page-title">财务仪表盘</h1>
+                                <p class="page-subtitle">
+                                    欢迎回来！这是您的财务概览
+                                    <span class="text-muted">· 最后更新：<span id="lastUpdateTime">刚刚</span></span>
+                                </p>
+                            </div>
+                            <div class="page-actions">
+                                <button class="btn btn-secondary" id="refreshDashboard">
+                                    <i class="bi bi-arrow-clockwise"></i> 刷新
+                                </button>
+                                <button class="btn btn-primary" id="quickAddTransaction">
+                                    <i class="bi bi-plus"></i> 快速记账
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 资产总览卡片 -->
+                    <div class="mb-4">
+                        <div class="overview-card">
+                            <div class="overview-title">总资产</div>
+                            <div class="overview-value" id="total-assets">¥0.00</div>
+                            <div class="overview-subtitle">
+                                共 <span id="account-count">0</span> 个账户，
+                                <span id="transaction-count">0</span> 笔交易
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 资产类型统计 -->
+                    <div class="stats-grid">
+                        <div class="asset-type-card liquid" onclick="filterByType('流动资产')">
+                            <div class="asset-type-header">
+                                <div class="asset-type-info">
+                                    <div class="asset-type-name">流动资产</div>
+                                    <div class="asset-type-value">¥0.00</div>
+                                </div>
+                                <div class="asset-type-icon liquid">💵</div>
+                            </div>
+                            <div class="asset-type-footer">
+                                <div class="asset-type-change positive">
+                                    <i class="bi bi-arrow-up"></i> 0.0%
+                                </div>
+                                <div class="asset-type-count">0% 占比</div>
+                            </div>
+                        </div>
+
+                        <div class="asset-type-card investment" onclick="filterByType('投资资产')">
+                            <div class="asset-type-header">
+                                <div class="asset-type-info">
+                                    <div class="asset-type-name">投资资产</div>
+                                    <div class="asset-type-value">¥0.00</div>
+                                </div>
+                                <div class="asset-type-icon investment">📈</div>
+                            </div>
+                            <div class="asset-type-footer">
+                                <div class="asset-type-change positive">
+                                    <i class="bi bi-arrow-up"></i> 0.0%
+                                </div>
+                                <div class="asset-type-count">0% 占比</div>
+                            </div>
+                        </div>
+
+                        <div class="asset-type-card fixed" onclick="filterByType('固定资产')">
+                            <div class="asset-type-header">
+                                <div class="asset-type-info">
+                                    <div class="asset-type-name">固定资产</div>
+                                    <div class="asset-type-value">¥0.00</div>
+                                </div>
+                                <div class="asset-type-icon fixed">🏠</div>
+                            </div>
+                            <div class="asset-type-footer">
+                                <div class="asset-type-change negative">
+                                    <i class="bi bi-arrow-down"></i> 0.0%
+                                </div>
+                                <div class="asset-type-count">0% 占比</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 图表区域 -->
+                    <div class="charts-container">
+                        <!-- 资产趋势图 -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">资产趋势</h3>
+                                <div class="chart-options">
+                                    <button class="chart-option active" onclick="switchChartPeriod('trend', '7d')">7天</button>
+                                    <button class="chart-option" onclick="switchChartPeriod('trend', '30d')">30天</button>
+                                    <button class="chart-option" onclick="switchChartPeriod('trend', '90d')">90天</button>
+                                </div>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="assetTrendChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- 资产分布图 -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">资产分布</h3>
+                                <div class="chart-options">
+                                    <button class="chart-option active" onclick="switchDistributionView('type')">按类型</button>
+                                    <button class="chart-option" onclick="switchDistributionView('platform')">按平台</button>
+                                </div>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="assetTypePieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 底部网格 -->
+                    <div class="bottom-grid">
+                        <!-- 最近交易 -->
+                        <div class="recent-transactions-card">
+                            <div class="section-header">
+                                <h3 class="section-title">最近交易</h3>
+                                <a href="#" class="text-primary" onclick="event.preventDefault(); switchView('transactions')">查看全部</a>
+                            </div>
+                            <div id="recentTransactions">
+                                <!-- 动态加载 -->
+                            </div>
+                        </div>
+
+                        <!-- 财务指标 -->
+                        <div class="category-summary-card">
+                            <div class="section-header">
+                                <h3 class="section-title">财务指标</h3>
+                            </div>
+                            <div class="financial-metrics">
+                                <div class="metric-item">
+                                    <span class="metric-label">流动性比率</span>
+                                    <span class="metric-value" id="liquidityRatio">-</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">月储蓄率</span>
+                                    <span class="metric-value" id="savingsRate">-</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">应急基金</span>
+                                    <span class="metric-value" id="emergencyFund">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 额外的图表区域 -->
+                    <div class="charts-container mt-4">
+                        <!-- 月度收支对比 -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">月度收支对比</h3>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="monthlyIncomeExpenseChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- 资产增长趋势 -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">资产增长趋势</h3>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="assetGrowthChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- 收支分类明细 -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">收支分类明细</h3>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="categoryBreakdownChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 账户管理视图 -->
+                <section id="accounts-view" class="view-section d-none">
+                    <div class="page-header">
+                        <div class="page-header-content">
+                            <div>
+                                <h1 class="page-title">账户管理</h1>
+                                <p class="page-subtitle">管理您的所有资产账户</p>
+                            </div>
+                            <div class="page-actions">
+                                <button class="btn btn-primary" onclick="openAccountModal()">
+                                    <i class="bi bi-plus"></i> 新增账户
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accounts-container">
+                        <!-- 动态加载账户列表 -->
+                    </div>
+                </section>
+
+                <!-- 交易记录视图 -->
+                <section id="transactions-view" class="view-section d-none">
+                    <div class="page-header">
+                        <div class="page-header-content">
+                            <div>
+                                <h1 class="page-title">交易记录</h1>
+                                <p class="page-subtitle">查看和管理所有交易</p>
+                            </div>
+                            <div class="page-actions">
+                                <button class="btn btn-primary" onclick="openTransactionModal()">
+                                    <i class="bi bi-plus"></i> 新增交易
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="transactions-container">
+                        <!-- 动态加载交易列表 -->
+                    </div>
+                </section>
+
+                <!-- 数据分析视图 -->
+                <section id="analytics-view" class="view-section d-none">
+                    <div class="page-header">
+                        <div class="page-header-content">
+                            <div>
+                                <h1 class="page-title">数据分析</h1>
+                                <p class="page-subtitle">深入分析您的财务状况</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="analytics-container">
+                        <!-- 动态加载分析内容 -->
+                    </div>
+                </section>
+
+                <!-- 其他视图（占位） -->
+                <section id="categories-view" class="view-section d-none">
+                    <div class="page-header">
+                        <div class="page-header-content">
+                            <div>
+                                <h1 class="page-title">分类管理</h1>
+                                <p class="page-subtitle">管理资产分类</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🏷️</div>
+                        <div class="empty-state-title">功能开发中</div>
+                        <div class="empty-state-description">分类管理功能即将推出</div>
+                    </div>
+                </section>
+
+                <section id="import-view" class="view-section d-none">
+                    <div class="page-header">
+                        <div class="page-header-content">
+                            <div>
+                                <h1 class="page-title">数据导入</h1>
+                                <p class="page-subtitle">导入外部数据</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📥</div>
+                        <div class="empty-state-title">功能开发中</div>
+                        <div class="empty-state-description">数据导入功能即将推出</div>
+                    </div>
+                </section>
+
+                <section id="settings-view" class="view-section d-none">
+                    <div class="page-header">
+                        <div class="page-header-content">
+                            <div>
+                                <h1 class="page-title">系统设置</h1>
+                                <p class="page-subtitle">配置系统参数</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚙️</div>
+                        <div class="empty-state-title">功能开发中</div>
+                        <div class="empty-state-description">系统设置功能即将推出</div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- 移动端菜单按钮 -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- 侧边栏遮罩层 -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- 账户模态框 -->
+    <div id="accountModal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">新增账户</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="accountForm">
+                    <input type="hidden" id="accountId" name="accountId">
+
+                    <div class="form-group">
+                        <label class="form-label" for="accountName">账户名称 *</label>
+                        <input type="text" class="form-control" id="accountName" name="name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="accountCategory">账户分类 *</label>
+                            <select class="form-control form-select" id="accountCategory" name="category_id" required>
+                                <option value="">请选择分类</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="accountPlatform">所属平台</label>
+                            <input type="text" class="form-control" id="accountPlatform" name="platform"
+                                   placeholder="如：工商银行、支付宝">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="accountBalance">当前余额 *</label>
+                            <input type="number" class="form-control" id="accountBalance" name="balance"
+                                   step="0.01" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="accountNumber">账号后四位</label>
+                            <input type="text" class="form-control" id="accountNumber" name="account_number"
+                                   maxlength="4" placeholder="1234">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="accountDescription">备注说明</label>
+                        <textarea class="form-control" id="accountDescription" name="description"
+                                  rows="3" placeholder="可选填写账户用途等信息"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-close">取消</button>
+                <button type="submit" form="accountForm" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 交易模态框 -->
+    <div id="transactionModal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h2 class="modal-title">新增交易</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="transactionForm">
+                    <input type="hidden" id="transactionId" name="transactionId">
+
+                    <div class="form-group">
+                        <label class="form-label" for="transactionAccount">选择账户 *</label>
+                        <select class="form-control form-select" id="transactionAccount" name="account_id" required>
+                            <option value="">请选择账户</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="transactionDate">交易日期 *</label>
+                        <input type="date" class="form-control" id="transactionDate" name="date" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="transactionAmount">交易金额 *</label>
+                            <input type="number" class="form-control" id="transactionAmount" name="amount"
+                                   step="0.01" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">交易类型 *</label>
+                            <div style="display: flex; gap: 16px; margin-top: 8px;">
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="radio" name="type" value="收入" checked style="margin-right: 8px;">
+                                    <span style="color: var(--success-color); font-weight: 500;">收入</span>
+                                </label>
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="radio" name="type" value="支出" style="margin-right: 8px;">
+                                    <span style="color: var(--danger-color); font-weight: 500;">支出</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="transactionDescription">交易说明</label>
+                        <input type="text" class="form-control" id="transactionDescription" name="description"
+                               placeholder="请输入交易说明">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="transactionNote">备注</label>
+                        <textarea class="form-control" id="transactionNote" name="note"
+                                  rows="2" placeholder="可选填写备注信息"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-close">取消</button>
+                <button type="submit" form="transactionForm" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript文件 -->
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/charts.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
