@@ -1,0 +1,464 @@
+/**
+ * Chart Animation Effects Library
+ * Comprehensive animation styles for all chart types and interactions
+ */
+
+/* Base Animation Configuration */
+.chart-animated {
+    --animation-duration-fast: 200ms;
+    --animation-duration-normal: 500ms;
+    --animation-duration-slow: 1000ms;
+    --animation-easing-linear: linear;
+    --animation-easing-ease: ease;
+    --animation-easing-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --animation-easing-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --animation-easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --animation-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Entry Animations */
+.chart-enter-fade {
+    animation: chartEnterFade var(--animation-duration-normal) var(--animation-easing-ease-out) forwards;
+}
+
+@keyframes chartEnterFade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.chart-enter-scale {
+    animation: chartEnterScale var(--animation-duration-normal) var(--animation-easing-ease-out) forwards;
+}
+
+@keyframes chartEnterScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.chart-enter-slide-up {
+    animation: chartEnterSlideUp var(--animation-duration-normal) var(--animation-easing-ease-out) forwards;
+}
+
+@keyframes chartEnterSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chart-enter-rotate {
+    animation: chartEnterRotate var(--animation-duration-slow) var(--animation-easing-ease-out) forwards;
+}
+
+@keyframes chartEnterRotate {
+    from {
+        opacity: 0;
+        transform: rotate(-90deg) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(0) scale(1);
+    }
+}
+
+/* Bar Chart Specific Animations */
+.chart-bar-grow {
+    transform-origin: bottom;
+    animation: chartBarGrow var(--animation-duration-normal) var(--animation-easing-ease-out) forwards;
+}
+
+@keyframes chartBarGrow {
+    from {
+        transform: scaleY(0);
+    }
+    to {
+        transform: scaleY(1);
+    }
+}
+
+.chart-bar-slide-right {
+    transform-origin: left;
+    animation: chartBarSlideRight var(--animation-duration-normal) var(--animation-easing-ease-out) forwards;
+}
+
+@keyframes chartBarSlideRight {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
+/* Staggered Bar Animation */
+.chart-bars-stagger > * {
+    opacity: 0;
+    animation: chartBarStagger var(--animation-duration-normal) var(--animation-easing-ease-out) forwards;
+}
+
+.chart-bars-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.chart-bars-stagger > *:nth-child(2) { animation-delay: 50ms; }
+.chart-bars-stagger > *:nth-child(3) { animation-delay: 100ms; }
+.chart-bars-stagger > *:nth-child(4) { animation-delay: 150ms; }
+.chart-bars-stagger > *:nth-child(5) { animation-delay: 200ms; }
+.chart-bars-stagger > *:nth-child(6) { animation-delay: 250ms; }
+.chart-bars-stagger > *:nth-child(7) { animation-delay: 300ms; }
+.chart-bars-stagger > *:nth-child(8) { animation-delay: 350ms; }
+.chart-bars-stagger > *:nth-child(9) { animation-delay: 400ms; }
+.chart-bars-stagger > *:nth-child(10) { animation-delay: 450ms; }
+
+@keyframes chartBarStagger {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Line Chart Animations */
+.chart-line-draw {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: chartLineDraw var(--animation-duration-slow) var(--animation-easing-ease-in-out) forwards;
+}
+
+@keyframes chartLineDraw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.chart-point-appear {
+    opacity: 0;
+    animation: chartPointAppear var(--animation-duration-fast) var(--animation-easing-ease-out) forwards;
+    animation-delay: var(--animation-duration-slow);
+}
+
+@keyframes chartPointAppear {
+    from {
+        opacity: 0;
+        transform: scale(0);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Pie Chart Animations */
+.chart-pie-grow {
+    transform-origin: center;
+    animation: chartPieGrow var(--animation-duration-slow) var(--animation-easing-ease-out) forwards;
+}
+
+@keyframes chartPieGrow {
+    from {
+        transform: scale(0) rotate(-90deg);
+    }
+    to {
+        transform: scale(1) rotate(0);
+    }
+}
+
+.chart-pie-spin {
+    animation: chartPieSpin var(--animation-duration-slow) var(--animation-easing-ease-out);
+}
+
+@keyframes chartPieSpin {
+    from {
+        transform: rotate(0);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Donut Chart Center Text Animation */
+.chart-donut-text {
+    opacity: 0;
+    animation: chartDonutText var(--animation-duration-normal) var(--animation-easing-ease-out) forwards;
+    animation-delay: var(--animation-duration-slow);
+}
+
+@keyframes chartDonutText {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Radar Chart Animation */
+.chart-radar-expand {
+    transform-origin: center;
+    animation: chartRadarExpand var(--animation-duration-slow) var(--animation-easing-ease-out) forwards;
+}
+
+@keyframes chartRadarExpand {
+    from {
+        opacity: 0;
+        transform: scale(0);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Gauge Chart Needle Animation */
+.chart-gauge-needle {
+    transform-origin: center bottom;
+    animation: chartGaugeNeedle var(--animation-duration-slow) var(--animation-easing-bounce) forwards;
+}
+
+@keyframes chartGaugeNeedle {
+    0% {
+        transform: rotate(-90deg);
+    }
+    70% {
+        transform: rotate(calc(var(--gauge-value) * 1.8deg + 10deg));
+    }
+    100% {
+        transform: rotate(calc(var(--gauge-value) * 1.8deg));
+    }
+}
+
+/* Heatmap Cell Animation */
+.chart-heatmap-cell {
+    opacity: 0;
+    animation: chartHeatmapCell var(--animation-duration-fast) var(--animation-easing-ease-out) forwards;
+}
+
+@keyframes chartHeatmapCell {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Wave Animation for Time Series */
+.chart-wave-animation {
+    animation: chartWave 2s var(--animation-easing-ease-in-out) infinite;
+}
+
+@keyframes chartWave {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Pulse Animation for Highlights */
+.chart-pulse {
+    animation: chartPulse 1.5s var(--animation-easing-ease-in-out) infinite;
+}
+
+@keyframes chartPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+/* Loading Animation */
+.chart-loading-bars {
+    display: flex;
+    gap: 4px;
+    height: 40px;
+    align-items: flex-end;
+}
+
+.chart-loading-bar {
+    width: 8px;
+    background: var(--chart-color-1);
+    animation: chartLoadingBar 1.2s var(--animation-easing-ease-in-out) infinite;
+}
+
+.chart-loading-bar:nth-child(1) { animation-delay: 0s; }
+.chart-loading-bar:nth-child(2) { animation-delay: 0.1s; }
+.chart-loading-bar:nth-child(3) { animation-delay: 0.2s; }
+.chart-loading-bar:nth-child(4) { animation-delay: 0.3s; }
+.chart-loading-bar:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes chartLoadingBar {
+    0%, 100% {
+        height: 10px;
+    }
+    50% {
+        height: 30px;
+    }
+}
+
+/* Update Transition Effects */
+.chart-transition-smooth {
+    transition: all var(--animation-duration-normal) var(--animation-easing-ease-in-out);
+}
+
+.chart-transition-bounce {
+    transition: all var(--animation-duration-normal) var(--animation-easing-bounce);
+}
+
+/* Hover Effects */
+.chart-hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: all var(--animation-duration-fast) var(--animation-easing-ease-out);
+}
+
+.chart-hover-glow:hover {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    transition: box-shadow var(--animation-duration-fast) var(--animation-easing-ease-out);
+}
+
+/* Interactive Element Animations */
+.chart-interactive {
+    cursor: pointer;
+    transition: all var(--animation-duration-fast) var(--animation-easing-ease-out);
+}
+
+.chart-interactive:hover {
+    filter: brightness(1.1);
+}
+
+.chart-interactive:active {
+    transform: scale(0.98);
+}
+
+/* Tooltip Animation */
+.chart-tooltip-fade {
+    opacity: 0;
+    transition: opacity var(--animation-duration-fast) var(--animation-easing-ease-out);
+}
+
+.chart-tooltip-fade.show {
+    opacity: 1;
+}
+
+.chart-tooltip-slide {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all var(--animation-duration-fast) var(--animation-easing-ease-out);
+}
+
+.chart-tooltip-slide.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Legend Animation */
+.chart-legend-fade {
+    opacity: 0;
+    animation: chartLegendFade var(--animation-duration-normal) var(--animation-easing-ease-out) forwards;
+    animation-delay: var(--animation-duration-slow);
+}
+
+@keyframes chartLegendFade {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Data Update Animation */
+.chart-data-update {
+    animation: chartDataUpdate var(--animation-duration-normal) var(--animation-easing-ease-in-out);
+}
+
+@keyframes chartDataUpdate {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Error State Animation */
+.chart-error-shake {
+    animation: chartErrorShake var(--animation-duration-fast) var(--animation-easing-ease-in-out);
+}
+
+@keyframes chartErrorShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+/* Success Animation */
+.chart-success-bounce {
+    animation: chartSuccessBounce var(--animation-duration-normal) var(--animation-easing-bounce);
+}
+
+@keyframes chartSuccessBounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Responsive Animation Adjustments */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .chart-animated {
+        --animation-duration-normal: 300ms;
+        --animation-duration-slow: 600ms;
+    }
+}
+
+/* Performance Optimization */
+.chart-will-animate {
+    will-change: transform, opacity;
+}
+
+.chart-animation-complete {
+    will-change: auto;
+}

@@ -8,19 +8,210 @@ let assetSummary = {};
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
     setupEventListeners();
+
+    // ========== 第二阶段新增：初始化图表系统 ==========
+    initChartSystem();
+    initThemeSystem();
+
     loadDashboard();
 });
 
 // 初始化应用
 function initializeApp() {
-    // 检查本地存储的主题设置
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.body.setAttribute('data-theme', savedTheme);
+    // 检查本地存储的主题设置 - 移至 initThemeSystem
+    // const savedTheme = localStorage.getItem('theme') || 'light';
+    // document.body.setAttribute('data-theme', savedTheme);
 
     // 设置当前日期
     const today = new Date().toLocaleDateString('zh-CN');
     document.querySelectorAll('.current-date').forEach(el => {
         el.textContent = today;
+    });
+}
+
+// ========== 第二阶段新增：初始化图表系统 ==========
+function initChartSystem() {
+    // 检查Chart.js是否加载
+    if (typeof Chart === 'undefined') {
+        console.error('Chart.js 未加载');
+        return;
+    }
+
+    // 设置Chart.js默认配置
+    Chart.defaults.font.family = "'Microsoft YaHei', 'Arial', sans-serif";
+    Chart.defaults.responsive = true;
+    Chart.defaults.maintainAspectRatio = false;
+    Chart.defaults.plugins.legend.display = true;
+    Chart.defaults.plugins.legend.position = 'top';
+    Chart.defaults.plugins.legend.labels.usePointStyle = true;
+    Chart.defaults.plugins.legend.labels.padding = 15;
+
+    // 设置默认颜色
+    Chart.defaults.color = '#374151';
+
+    // 注册自定义插件
+    registerChartPlugins();
+
+    // 初始化全局图表存储
+    if (!window.charts) {
+        window.charts = {};
+    }
+
+    console.log('图表系统初始化完成');
+}
+
+// ========== 第二阶段新增：初始化主题系统 ==========
+function initThemeSystem() {
+    // 应用保存的主题
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.body.setAttribute('data-theme', savedTheme);
+
+    // 创建主题切换按钮（如果不存在）
+    createThemeToggleButton();
+
+    // 主题切换按钮事件
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        // 设置初始图标
+        updateThemeIcon(savedTheme);
+
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = document.body.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            // 切换主题
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+
+            // 添加过渡动画
+            document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+
+            // 触发主题更改事件
+            document.dispatchEvent(new CustomEvent('themeChanged', {
+                detail: { theme: newTheme }
+            }));
+
+            // 更新所有图表的主题
+            updateChartsTheme(newTheme);
+        });
+    }
+}
+
+// ========== 第二阶段新增：创建主题切换按钮 ==========
+function createThemeToggleButton() {
+    if (!document.getElementById('theme-toggle')) {
+        const header = document.querySelector('.header');
+        if (header) {
+            const themeButton = document.createElement('button');
+            themeButton.id = 'theme-toggle';
+            themeButton.className = 'btn btn-icon theme-toggle';
+            themeButton.innerHTML = '<i class="fas fa-moon"></i>';
+            themeButton.title = '切换主题';
+
+            // 插入到header的合适位置
+            const headerActions = header.querySelector('.header-actions');
+            if (headerActions) {
+                headerActions.appendChild(themeButton);
+            } else {
+                header.appendChild(themeButton);
+            }
+        }
+    }
+}
+
+// ========== 第二阶段新增：更新主题图标 ==========
+function updateThemeIcon(theme) {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.innerHTML = theme === 'light'
+            ? '<i class="fas fa-moon"></i>'
+            : '<i class="fas fa-sun"></i>';
+        themeToggle.setAttribute('title', theme === 'light' ? '切换到深色模式' : '切换到浅色模式');
+    }
+}
+
+// ========== 第二阶段新增：注册Chart.js自定义插件 ==========
+function registerChartPlugins() {
+    // 中心文本插件（用于环形图）
+    Chart.register({
+        id: 'centerText',
+        beforeDraw: function(chart, args, options) {
+            if (options.display && chart.config.type === 'doughnut') {
+                const ctx = chart.ctx;
+                const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
+                const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
+
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                // 根据当前主题设置文本颜色
+                const currentTheme = document.body.getAttribute('data-theme');
+                ctx.fillStyle = currentTheme === 'dark' ? '#e5e7eb' : '#374151';
+
+                // 主文本
+                if (options.text) {
+                    ctx.font = 'bold 24px Microsoft YaHei';
+                    ctx.fillText(options.text, centerX, centerY - 10);
+                }
+
+                // 副文本
+                if (options.subText) {
+                    ctx.font = '14px Microsoft YaHei';
+                    ctx.fillText(options.subText, centerX, centerY + 15);
+                }
+
+                ctx.restore();
+            }
+        }
+    });
+}
+
+// ========== 第二阶段新增：更新所有图表主题 ==========
+function updateChartsTheme(theme) {
+    const themeColors = {
+        light: {
+            textColor: '#374151',
+            gridColor: 'rgba(0, 0, 0, 0.05)',
+            backgroundColor: '#ffffff'
+        },
+        dark: {
+            textColor: '#e5e7eb',
+            gridColor: 'rgba(255, 255, 255, 0.1)',
+            backgroundColor: '#1f2937'
+        }
+    };
+
+    const colors = themeColors[theme];
+
+    // 更新Chart.js默认配置
+    Chart.defaults.color = colors.textColor;
+    Chart.defaults.scales.linear.grid.color = colors.gridColor;
+    Chart.defaults.scales.category.grid.color = colors.gridColor;
+
+    // 更新所有现有图表
+    Object.values(window.charts).forEach(chart => {
+        if (chart && chart.options) {
+            // 更新字体颜色
+            if (chart.options.plugins?.legend?.labels) {
+                chart.options.plugins.legend.labels.color = colors.textColor;
+            }
+
+            // 更新坐标轴
+            if (chart.options.scales) {
+                Object.values(chart.options.scales).forEach(scale => {
+                    if (scale.ticks) {
+                        scale.ticks.color = colors.textColor;
+                    }
+                    if (scale.grid) {
+                        scale.grid.color = colors.gridColor;
+                    }
+                });
+            }
+
+            chart.update('none');
+        }
     });
 }
 
@@ -64,7 +255,41 @@ function setupEventListeners() {
         document.querySelector('.sidebar').classList.remove('show');
         this.classList.remove('show');
     });
+
+    // ========== 第二阶段新增：窗口大小变化事件 ==========
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            // 触发自定义resize事件，供图表响应
+            document.dispatchEvent(new Event('windowResized'));
+
+            // 调整所有图表大小
+            Object.values(window.charts).forEach(chart => {
+                if (chart && chart.resize) {
+                    chart.resize();
+                }
+            });
+        }, 250);
+    });
+
+    // ========== 第二阶段新增：页面卸载时清理 ==========
+    window.addEventListener('beforeunload', function() {
+        // 销毁所有图表实例
+        if (window.ChartFactory) {
+            window.ChartFactory.destroyAllCharts();
+        }
+
+        // 销毁旧版图表
+        Object.values(window.charts).forEach(chart => {
+            if (chart && chart.destroy) {
+                chart.destroy();
+            }
+        });
+    });
 }
+
+// [以下为原有代码，保持不变]
 
 // 导航处理
 function handleNavigation(e) {
@@ -150,9 +375,15 @@ async function loadDashboard() {
         const trendData = await trendRes.json();
         updateTrendChart(trendData);
 
+        // ========== 第二阶段修改：使用新的图表系统 ==========
         // 初始化仪表板特有功能
         if (typeof dashboard !== 'undefined' && dashboard.init) {
             dashboard.init();
+        }
+
+        // 如果有新的图表工厂，使用它创建仪表板图表
+        if (window.ChartFactory) {
+            initDashboardChartsWithFactory();
         }
 
     } catch (error) {
@@ -160,6 +391,16 @@ async function loadDashboard() {
         console.error('Error loading dashboard:', error);
     }
 }
+
+// ========== 第二阶段新增：使用图表工厂初始化仪表板图表 ==========
+function initDashboardChartsWithFactory() {
+    // 这个函数将在dashboard.js中实现具体的图表创建逻辑
+    if (typeof initAdvancedDashboardCharts === 'function') {
+        initAdvancedDashboardCharts();
+    }
+}
+
+// [以下保持原有代码不变，包括所有其他函数...]
 
 // 更新仪表板统计
 function updateDashboardStats() {
@@ -352,7 +593,6 @@ async function loadTransactions() {
     }
 }
 
-// 加载数据分析
 // 加载数据分析
 async function loadAnalytics() {
     try {
@@ -809,11 +1049,16 @@ function createMonthlyChart(monthlyStats) {
     const ctx = document.getElementById('monthlyChart');
     if (!ctx) return;
 
+    // ========== 第二阶段修改：销毁旧图表 ==========
+    if (window.charts.monthly) {
+        window.charts.monthly.destroy();
+    }
+
     const months = Object.keys(monthlyStats).slice(0, 12).reverse();
     const incomeData = months.map(m => monthlyStats[m]?.income || 0);
     const expenseData = months.map(m => monthlyStats[m]?.expense || 0);
 
-    new Chart(ctx, {
+    window.charts.monthly = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: months.map(m => {
@@ -867,11 +1112,16 @@ function createCategoryAnalysisChart(categoryData) {
     const ctx = document.getElementById('categoryChart');
     if (!ctx) return;
 
+    // ========== 第二阶段修改：销毁旧图表 ==========
+    if (window.charts.category) {
+        window.charts.category.destroy();
+    }
+
     const categories = categoryData.map(item => item.category || '未分类');
     const amounts = categoryData.map(item => item.total);
 
-    new Chart(ctx, {
-        type: 'bar',  // 修改为 'bar' 而不是 'horizontalBar'
+    window.charts.category = new Chart(ctx, {
+        type: 'bar',
         data: {
             labels: categories,
             datasets: [{
@@ -884,7 +1134,7 @@ function createCategoryAnalysisChart(categoryData) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            indexAxis: 'y',  // 保持水平条形图
+            indexAxis: 'y',
             plugins: {
                 legend: { display: false }
             },
@@ -1136,6 +1386,25 @@ if (!document.getElementById('additional-styles')) {
             color: var(--gray-600);
         }
 
+        /* ========== 第二阶段新增：主题切换按钮样式 ========== */
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: var(--radius-md);
+            transition: background-color 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--gray-100);
+        }
+
+        [data-theme="dark"] .theme-toggle:hover {
+            background-color: var(--gray-800);
+        }
+
         @media (max-width: 768px) {
             .analytics-content {
                 grid-template-columns: 1fr;
@@ -1322,3 +1591,9 @@ function createCategoryDoughnutChart(categoryData) {
         }
     });
 }
+
+// ========== 第二阶段新增：全局错误处理 ==========
+window.addEventListener('error', function(e) {
+    console.error('全局错误:', e.error);
+    // 可以添加错误上报逻辑
+});

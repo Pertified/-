@@ -1,0 +1,224 @@
+/**
+ * Dark Theme Styles
+ * Dark mode theme for reduced eye strain in low-light environments
+ */
+
+[data-theme="dark"] {
+    /* Primary Colors */
+    --primary-color: #60a5fa;
+    --primary-hover: #3b82f6;
+    --primary-light: #1e293b;
+    --primary-dark: #93bbfc;
+
+    /* Secondary Colors */
+    --secondary-color: #9ca3af;
+    --secondary-hover: #d1d5db;
+    --secondary-light: #374151;
+    --secondary-dark: #e5e7eb;
+
+    /* Status Colors */
+    --success-color: #34d399;
+    --success-bg: #064e3b;
+    --warning-color: #fbbf24;
+    --warning-bg: #78350f;
+    --error-color: #f87171;
+    --error-bg: #7f1d1d;
+    --info-color: #60a5fa;
+    --info-bg: #1e3a8a;
+
+    /* Background Colors */
+    --bg-primary: #111827;
+    --bg-secondary: #1f2937;
+    --bg-tertiary: #374151;
+    --bg-overlay: rgba(0, 0, 0, 0.8);
+
+    /* Text Colors */
+    --text-primary: #f3f4f6;
+    --text-secondary: #d1d5db;
+    --text-tertiary: #9ca3af;
+    --text-inverse: #1f2937;
+
+    /* Border Colors */
+    --border-primary: #374151;
+    --border-secondary: #4b5563;
+    --border-hover: #6b7280;
+    --border-focus: #60a5fa;
+
+    /* Shadow Effects */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.7);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.9);
+
+    /* Component Specific Colors */
+    --card-bg: #1f2937;
+    --card-border: #374151;
+    --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+
+    --input-bg: #1f2937;
+    --input-border: #4b5563;
+    --input-focus-border: #60a5fa;
+    --input-disabled-bg: #374151;
+
+    --button-primary-bg: #3b82f6;
+    --button-primary-text: #ffffff;
+    --button-primary-hover: #2563eb;
+    --button-secondary-bg: #374151;
+    --button-secondary-text: #e5e7eb;
+    --button-secondary-hover: #4b5563;
+
+    --table-header-bg: #1f2937;
+    --table-row-hover: #374151;
+    --table-border: #374151;
+
+    --navbar-bg: #1f2937;
+    --navbar-border: #374151;
+    --sidebar-bg: #111827;
+    --sidebar-hover: #374151;
+
+    /* Chart Specific Colors */
+    --chart-bg: #1f2937;
+    --chart-grid: rgba(255, 255, 255, 0.1);
+    --chart-text: #e5e7eb;
+    --chart-axis: #6b7280;
+}
+
+/* Dark Theme Specific Styles */
+[data-theme="dark"] {
+    /* Color Scheme Override */
+    color-scheme: dark;
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--bg-tertiary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--secondary-color);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--secondary-hover);
+    }
+
+    /* Selection Colors */
+    ::selection {
+        background: var(--primary-dark);
+        color: var(--bg-primary);
+    }
+
+    /* Focus Styles */
+    :focus {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+
+    /* Link Styles */
+    a {
+        color: var(--primary-color);
+    }
+
+    a:hover {
+        color: var(--primary-hover);
+    }
+
+    /* Code Block Styles */
+    code {
+        background: var(--bg-tertiary);
+        color: var(--primary-color);
+        border: 1px solid var(--border-primary);
+    }
+
+    /* Image Opacity for Dark Mode */
+    img {
+        opacity: 0.9;
+    }
+
+    img:hover {
+        opacity: 1;
+    }
+
+    /* Table Styles */
+    table {
+        background: var(--bg-secondary);
+        border-color: var(--table-border);
+    }
+
+    th {
+        background: var(--table-header-bg);
+        color: var(--text-primary);
+    }
+
+    tr:hover {
+        background: var(--table-row-hover);
+    }
+
+    /* Form Elements */
+    input, textarea, select {
+        background: var(--input-bg);
+        border-color: var(--input-border);
+        color: var(--text-primary);
+    }
+
+    input:focus, textarea:focus, select:focus {
+        border-color: var(--input-focus-border);
+        box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+    }
+
+    /* Placeholder Text */
+    ::placeholder {
+        color: var(--text-tertiary);
+        opacity: 0.8;
+    }
+
+    /* Card Components */
+    .card {
+        background: var(--card-bg);
+        border-color: var(--card-border);
+        box-shadow: var(--card-shadow);
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+        background: var(--bg-overlay);
+    }
+
+    /* Tooltip */
+    .tooltip {
+        background: var(--text-primary);
+        color: var(--bg-primary);
+    }
+
+    /* Badge Colors */
+    .badge-primary {
+        background: var(--primary-light);
+        color: var(--primary-color);
+    }
+
+    .badge-success {
+        background: var(--success-bg);
+        color: var(--success-color);
+    }
+
+    .badge-warning {
+        background: var(--warning-bg);
+        color: var(--warning-color);
+    }
+
+    .badge-error {
+        background: var(--error-bg);
+        color: var(--error-color);
+    }
+
+    /* Syntax Highlighting Adjustments */
+    .syntax-keyword { color: #f97316; }
+    .syntax-string { color: #34d399; }
+    .syntax-number { color: #60a5fa; }
+    .syntax-comment { color: #6b7280; }
+}

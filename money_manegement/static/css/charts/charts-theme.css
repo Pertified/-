@@ -1,0 +1,418 @@
+/**
+ * 图表主题配置
+ * 定义图表的颜色方案和主题相关样式
+ */
+
+/* 图表主题CSS变量定义 */
+:root {
+    /* 图表基础颜色 */
+    --chart-background: #ffffff;
+    --chart-border-color: #e5e7eb;
+    --chart-text-primary: #1f2937;
+    --chart-text-secondary: #6b7280;
+    --chart-grid-color: rgba(0, 0, 0, 0.05);
+
+    /* 数据颜色方案 - 默认 */
+    --chart-color-1: #3b82f6;
+    --chart-color-2: #ef4444;
+    --chart-color-3: #10b981;
+    --chart-color-4: #f59e0b;
+    --chart-color-5: #8b5cf6;
+    --chart-color-6: #ec4899;
+    --chart-color-7: #06b6d4;
+    --chart-color-8: #84cc16;
+    --chart-color-9: #f97316;
+    --chart-color-10: #6366f1;
+
+    /* 语义化颜色 */
+    --chart-positive-color: #10b981;
+    --chart-negative-color: #ef4444;
+    --chart-warning-color: #f59e0b;
+    --chart-info-color: #3b82f6;
+
+    /* 图表阴影 */
+    --chart-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --chart-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --chart-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+    /* 动画时长 */
+    --chart-animation-duration: 750ms;
+    --chart-animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 深色主题 */
+[data-theme="dark"] {
+    --chart-background: #1f2937;
+    --chart-border-color: #374151;
+    --chart-text-primary: #e5e7eb;
+    --chart-text-secondary: #9ca3af;
+    --chart-grid-color: rgba(255, 255, 255, 0.1);
+
+    /* 深色主题数据颜色 - 提高亮度 */
+    --chart-color-1: #60a5fa;
+    --chart-color-2: #f87171;
+    --chart-color-3: #34d399;
+    --chart-color-4: #fbbf24;
+    --chart-color-5: #a78bfa;
+    --chart-color-6: #f9a8d4;
+    --chart-color-7: #22d3ee;
+    --chart-color-8: #a3e635;
+    --chart-color-9: #fb923c;
+    --chart-color-10: #818cf8;
+
+    /* 深色主题阴影 */
+    --chart-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --chart-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --chart-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.7);
+}
+
+/* 财务专业主题 */
+[data-theme="financial"] {
+    --chart-color-1: #2563eb;
+    --chart-color-2: #059669;
+    --chart-color-3: #7c3aed;
+    --chart-color-4: #dc2626;
+    --chart-color-5: #0891b2;
+    --chart-color-6: #ca8a04;
+    --chart-color-7: #db2777;
+    --chart-color-8: #65a30d;
+    --chart-color-9: #ea580c;
+    --chart-color-10: #4f46e5;
+}
+
+/* 高对比度主题 */
+[data-theme="high-contrast"] {
+    --chart-background: #000000;
+    --chart-border-color: #ffffff;
+    --chart-text-primary: #ffffff;
+    --chart-text-secondary: #cccccc;
+    --chart-grid-color: rgba(255, 255, 255, 0.3);
+
+    --chart-color-1: #ffffff;
+    --chart-color-2: #ffff00;
+    --chart-color-3: #00ff00;
+    --chart-color-4: #00ffff;
+    --chart-color-5: #ff00ff;
+    --chart-color-6: #ff0000;
+    --chart-color-7: #0000ff;
+    --chart-color-8: #ffa500;
+    --chart-color-9: #800080;
+    --chart-color-10: #008080;
+}
+
+/* 图表类型特定主题样式 */
+
+/* 饼图/环形图主题 */
+.chart-container[data-chart-type="pie"],
+.chart-container[data-chart-type="doughnut"] {
+    .chart-segment {
+        transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .chart-segment:hover {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* 折线图主题 */
+.chart-container[data-chart-type="line"] {
+    .chart-line {
+        stroke-width: 2;
+        fill: none;
+        transition: stroke-width 0.2s ease;
+    }
+
+    .chart-line:hover {
+        stroke-width: 3;
+    }
+
+    .chart-point {
+        r: 3;
+        transition: r 0.2s ease;
+    }
+
+    .chart-point:hover {
+        r: 5;
+    }
+
+    .chart-area {
+        opacity: 0.1;
+        transition: opacity 0.2s ease;
+    }
+
+    .chart-area:hover {
+        opacity: 0.2;
+    }
+}
+
+/* 柱状图主题 */
+.chart-container[data-chart-type="bar"] {
+    .chart-bar {
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        transform-origin: bottom;
+    }
+
+    .chart-bar:hover {
+        opacity: 0.8;
+        transform: scaleY(1.02);
+    }
+}
+
+/* 雷达图主题 */
+.chart-container[data-chart-type="radar"] {
+    .radar-grid {
+        stroke: var(--chart-grid-color);
+        fill: none;
+    }
+
+    .radar-area {
+        fill-opacity: 0.2;
+        stroke-width: 2;
+        transition: fill-opacity 0.2s ease;
+    }
+
+    .radar-area:hover {
+        fill-opacity: 0.3;
+    }
+}
+
+/* 热力图主题 */
+.chart-container[data-chart-type="heatmap"] {
+    .heatmap-cell {
+        stroke: var(--chart-background);
+        stroke-width: 1;
+        transition: stroke-width 0.2s ease, opacity 0.2s ease;
+    }
+
+    .heatmap-cell:hover {
+        stroke-width: 2;
+        stroke: var(--chart-text-primary);
+        opacity: 0.8;
+    }
+}
+
+/* 仪表盘主题 */
+.chart-container[data-chart-type="gauge"] {
+    .gauge-needle {
+        fill: var(--chart-text-primary);
+        transition: transform 0.5s var(--chart-animation-easing);
+    }
+
+    .gauge-segment-low {
+        fill: var(--chart-negative-color);
+    }
+
+    .gauge-segment-medium {
+        fill: var(--chart-warning-color);
+    }
+
+    .gauge-segment-high {
+        fill: var(--chart-positive-color);
+    }
+}
+
+/* 数据标签主题 */
+.chart-data-label {
+    font-size: 11px;
+    font-weight: 600;
+    fill: var(--chart-text-primary);
+    text-anchor: middle;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.chart-container:hover .chart-data-label {
+    opacity: 1;
+}
+
+/* 工具提示主题 */
+.chart-tooltip {
+    position: absolute;
+    background: var(--chart-background);
+    border: 1px solid var(--chart-border-color);
+    border-radius: var(--radius-md, 6px);
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--chart-text-primary);
+    box-shadow: var(--chart-shadow-lg);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 100;
+}
+
+.chart-tooltip.show {
+    opacity: 1;
+}
+
+.chart-tooltip-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--chart-border-color);
+}
+
+.chart-tooltip-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+}
+
+.chart-tooltip-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.chart-tooltip-label {
+    flex: 1;
+    color: var(--chart-text-secondary);
+}
+
+.chart-tooltip-value {
+    font-weight: 600;
+    color: var(--chart-text-primary);
+}
+
+/* 图例主题样式 */
+.chart-legend-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 0;
+    justify-content: center;
+}
+
+.chart-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm, 4px);
+    transition: background 0.2s ease;
+}
+
+.chart-legend-item:hover {
+    background: var(--chart-border-color);
+}
+
+.chart-legend-item.disabled {
+    opacity: 0.4;
+}
+
+.chart-legend-color {
+    width: 20px;
+    height: 12px;
+    border-radius: 2px;
+    border: 1px solid var(--chart-border-color);
+}
+
+.chart-legend-text {
+    font-size: 13px;
+    color: var(--chart-text-secondary);
+}
+
+/* 网格线主题 */
+.chart-grid-line {
+    stroke: var(--chart-grid-color);
+    stroke-dasharray: 2, 2;
+}
+
+.chart-axis-line {
+    stroke: var(--chart-border-color);
+    stroke-width: 1;
+}
+
+.chart-axis-text {
+    fill: var(--chart-text-secondary);
+    font-size: 11px;
+}
+
+/* 选中和高亮状态 */
+.chart-element-selected {
+    stroke: var(--chart-info-color) !important;
+    stroke-width: 3 !important;
+}
+
+.chart-element-highlighted {
+    opacity: 1 !important;
+}
+
+.chart-element-dimmed {
+    opacity: 0.3 !important;
+}
+
+/* 动画主题类 */
+.chart-fade-in {
+    animation: chartFadeIn var(--chart-animation-duration) var(--chart-animation-easing);
+}
+
+.chart-slide-up {
+    animation: chartSlideUp var(--chart-animation-duration) var(--chart-animation-easing);
+}
+
+.chart-scale-in {
+    animation: chartScaleIn var(--chart-animation-duration) var(--chart-animation-easing);
+}
+
+@keyframes chartFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes chartSlideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes chartScaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* 响应式主题调整 */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+        --chart-background: #1f2937;
+        --chart-border-color: #374151;
+        --chart-text-primary: #e5e7eb;
+        --chart-text-secondary: #9ca3af;
+        --chart-grid-color: rgba(255, 255, 255, 0.1);
+    }
+}
+
+@media (max-width: 768px) {
+    .chart-legend-container {
+        font-size: 12px;
+        gap: 12px;
+    }
+
+    .chart-legend-item {
+        padding: 2px 6px;
+    }
+
+    .chart-legend-color {
+        width: 16px;
+        height: 10px;
+    }
+}
